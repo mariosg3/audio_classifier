@@ -1,94 +1,113 @@
 # GTZAN Audio Genre Classifier
 
-A production-ready audio classification pipeline designed to identify music genres using the **GTZAN dataset**. This project leverages **HuggingFace Transformers (MERT)** for robust feature extraction and **Scikit-Learn (SVM)** for efficient classification.
+A production-ready audio classification pipeline designed to identify
+music genres using the **GTZAN dataset**.\
+This project leverages **HuggingFace Transformers (MERT)** for
+high-quality audio embeddings and **Scikit-Learn (SVM)** for efficient
+and robust classification.
+
+------------------------------------------------------------------------
 
 ## Key Features
 
-* **Embeddings:** Uses [MERT-v1-95M](https://huggingface.co/m-a-p/MERT-v1-95M) for extracting high-quality audio representations.
-* **Smart Preprocessing:** Automatically handles audio chunking, overlapping, and padding.
-* **Robust Classification:** Implements a pipeline with Scaling, PCA, and SVM (Support Vector Machine).
-* **Modern Tooling:** Built with `uv` and `hatchling` for dependency management.
+-   **Transformer Embeddings:** Uses
+    [MERT-v1-95M](https://huggingface.co/m-a-p/MERT-v1-95M) for
+    extracting rich audio representations.
+-   **Smart Preprocessing:** Automatic audio chunking, overlapping
+    windows, and padding.
+-   **Robust Classification Pipeline:** Scaling → PCA → SVM.
+-   **Modern Tooling:** Built with `uv` + `hatchling` and fully
+    configurable via `pyproject.toml`.
 
-## Getting Started
+------------------------------------------------------------------------
 
-Follow these instructions to set up your local development environment.
+## Installation
 
-You can install `uv` using `pip`:
-```bash
+Requires **Python 3.10+**
+
+``` bash
+
 pip install uv
+uv venv .venv
+source .venv/bin/activate        # Linux/macOS
+.\.venv\Scripts\activate       # Windows
+uv pip install -e .
 ```
 
-### Installation
+------------------------------------------------------------------------
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <your-repository-url>
-    cd gtzan-audio-genre-classifier
-    ```
-
-2.  **Create and activate a virtual environment:**
-    Use `uv` to create a virtual environment.
-    ```bash
-    uv venv
-    ```
-
-3.  **Activate the environment:**
-    ```bash
-    # macOS/Linux
-    source .venv/bin/activate
-    
-    # Windows
-    .venv\Scripts\activate
-    ```
-
-3.  **Install dependencies:**
-    Install the project and its development dependencies in editable mode.
-    ```bash
-    uv pip install -e .
-    ```
-
-## Project Structure
-
-```text
-.
-├── data/                   # Data storage (created automatically)
-├── models/                 # Saved models (created automatically)
-├── src/
-│   ├── svm_config.json           # Configuration for GridSearch
-│   └── audio_classifier/
-│       ├── dataset.py            # GTZAN loading & chunking logic
-│       ├── feature_extraction.py # MERT inference script
-│       ├── train.py              # SVM training & evaluation
-│       └── __utils__.py          # Metrics & plotting helpers
-├── pyproject.toml          # Project dependencies & script definitions
-└── README.md
-```
 ## Usage
 
-The project includes command-line scripts for each stage of the pipeline. These scripts are defined in `pyproject.toml` and installed via `hatchling`.
+All CLI tools are installed automatically when running
+`pip install -e .`.
 
-### 1. Feature Extraction
+------------------------------------------------------------------------
 
-This script processes the GTZAN dataset, chunks audio files, and extracts embeddings using the MERT model. The resulting features are saved to disk.
+### **1. Feature Extraction**
 
-```bash
+Extracts MERT embeddings from the dataset and stores them on disk.
+
+``` bash
 audio-extract
 ```
 
-### 2. Model Training
+------------------------------------------------------------------------
 
-This script loads the extracted features, performs hyperparameter tuning using `GridSearchCV` on an SVM classifier, and saves the best-performing model.
+### **2. Model Training**
 
-```bash
+Runs GridSearchCV over SVM hyperparameters and saves the best-performing
+model.
+
+``` bash
 audio-train
 ```
 
-*Note: You can customize the `GridSearchCV` parameters by modifying `src/svm_config.json`.*
+You can modify the hyperparameter search space in:
 
-### 3. Model Inference
+    src/svm_config.json
 
-Predict the genre of a specific audio file using the best saved model.
+------------------------------------------------------------------------
 
-```bash
+### **3. Model Inference**
+
+Predict the genre of a single audio file:
+
+``` bash
 audio-inference --path "path/to/your/song.wav"
 ```
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## Alternative Commands (if CLI scripts do not work)
+
+If the main CLI scripts (`audio-extract`, `audio-train`, `audio-inference`) do not work, you can run the modules directly using `uv`:
+
+```
+bash
+# Feature extraction
+uv run python -m audio_classifier.feature_extraction
+
+# Model training
+uv run python -m audio_classifier.train
+
+# Model inference
+uv run python -m audio_classifier.inference
+```
+
+------------------------------------------------------------------------
+## Results
+
+The SVM classifier was evaluated on the extracted MERT embeddings across all 10 GTZAN genres.
+
+Below is the confusion matrix generated during evaluation:
+
+![Confusion Matrix](svm_confusion_matrix.png)
+
+------------------------------------------------------------------------
+## License
+
+This project is released under the MIT License.\
+GTZAN dataset must be downloaded separately and is subject to its
+original license.
