@@ -48,7 +48,7 @@ All CLI tools are installed automatically when running
 Extracts MERT embeddings from the dataset and stores them on disk.
 
 ``` bash
-audio-extract
+uv run python -m audio_classifier.feature_extraction
 ```
 
 ------------------------------------------------------------------------
@@ -59,7 +59,7 @@ Runs GridSearchCV over SVM hyperparameters and saves the best-performing
 model.
 
 ``` bash
-audio-train
+uv run python -m audio_classifier.train
 ```
 
 You can modify the hyperparameter search space in:
@@ -73,27 +73,7 @@ You can modify the hyperparameter search space in:
 Predict the genre of a single audio file:
 
 ``` bash
-audio-inference --path "path/to/your/song.wav"
-```
-
-------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-
-## Alternative Commands (if CLI scripts do not work)
-
-If the main CLI scripts (`audio-extract`, `audio-train`, `audio-inference`) do not work, you can run the modules directly using `uv`:
-
-```
-bash
-# Feature extraction
-uv run python -m audio_classifier.feature_extraction
-
-# Model training
-uv run python -m audio_classifier.train
-
-# Model inference
-uv run python -m audio_classifier.inference
+uv run python -m audio_classifier.inference --path "path/to/your/song.wav"
 ```
 
 ------------------------------------------------------------------------
