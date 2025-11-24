@@ -1,0 +1,40 @@
+[project]
+name = "audio_classifier"
+version = "0.1.0"
+description = "Production-ready Audio Classification with Wav2Vec2 and MLP"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "torch",
+    "torchaudio",
+    "transformers",
+    "datasets<3.0.0",
+    "scikit-learn",
+    "gradio",
+    "numpy",
+    "librosa",
+    "tqdm",
+    "matplotlib",
+    "seaborn",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "black",
+    "isort",
+    "ipykernel>=6.31.0",
+    "ipywidgets>=8.1.8",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/audio_classifier"]
+
+[project.scripts]
+audio-extract = "audio_classifier.feature_extraction:main"
+audio-train = "audio_classifier.train:main"
+audio-inference = "audio_classifier.inference:main"
